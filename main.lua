@@ -18,10 +18,5 @@ function love.draw()
     love.graphics.print("1200", bestScoreFont, 400, 615)
     love.graphics.print("score", currentScoreFont, 35, 675)
     love.graphics.print("3000", currentScoreFont, 370, 675)
-    local offset = 25
-    for x = 0, 3, 1 do
-        for y = 0, 3, 1 do
-            love.graphics.rectangle("fill", offset + x*135 + x*5, offset + y*135 + y*5, 135, 135, 8)
-        end
-    end
+    grid:draw()
 end

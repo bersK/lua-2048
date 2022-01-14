@@ -29,3 +29,12 @@ end
 -- Moves the tile at the position and returns if it was successful
 function Grid:moveTile(position, direction)
 end
+
+function Grid:draw()
+    local offset = 25
+    for x = 0, 3, 1 do
+        for y = 0, 3, 1 do
+            love.graphics.rectangle("fill", offset + x*135 + x*5, offset + y*135 + y*5, 135, 135, 8)
+        end
+    end
+end
