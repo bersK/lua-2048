@@ -6,6 +6,7 @@ Grid.__index = Grid
 
 function Grid.new()
     local o = setmetatable({size = 4, cells = {}}, Grid)
+    o.tileFont = love.graphics.newFont("fonts/retro_font.TTF", 50)
     return o
 end
 
@@ -31,10 +32,15 @@ function Grid:moveTile(position, direction)
 end
 
 function Grid:draw()
-    local offset = 25
-    for x = 0, 3, 1 do
-        for y = 0, 3, 1 do
-            love.graphics.rectangle("fill", offset + x*135 + x*5, offset + y*135 + y*5, 135, 135, 8)
-        end
+
+  local offset = 25
+  for x = 0, 3, 1 do
+    for y = 0, 3, 1 do
+      love.graphics.setColor(255,255,255,255)
+      love.graphics.rectangle("fill", offset + x*135 + x*5, offset + y*135 + y*5, 135, 135, 8)
+      love.graphics.setColor(0,0,0,255)
+      love.graphics.print("128", self.tileFont, offset + x*135 + x*5 + 5, offset + y*135 + y*5 + 50)
     end
+  end
+  love.graphics.setColor(255,255,255,255)
 end
