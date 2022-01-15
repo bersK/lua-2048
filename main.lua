@@ -7,6 +7,19 @@ function love.keyreleased(key)
     if key == "escape" or key == "q" then
         love.event.push("quit")
     end
+
+    if key == "a" then
+        print("Move left")
+    end
+    if key == "d" then
+        print("Move right")
+    end
+    if key == "w" then
+        print("Move up")
+    end
+    if key == "s" then
+        print("Move down")
+    end
 end
 
 function love.update(dt)
@@ -16,7 +29,7 @@ end
 function love.draw()
     local bestScoreFont = love.graphics.newFont("fonts/retro_font.TTF", 30)
     local currentScoreFont = love.graphics.newFont("fonts/retro_font.TTF", 55)
-    -- love.graphics.print("Is within bounds "..tostring(grid:withinBounds({x = 3, y = 3})), font, 35, 615)
+    love.graphics.setColor({1, 1, 1, 1})
     love.graphics.print("best score", bestScoreFont, 35, 615)
     love.graphics.print("1200", bestScoreFont, 400, 615)
     love.graphics.print("score", currentScoreFont, 35, 675)
