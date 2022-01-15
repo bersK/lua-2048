@@ -5,12 +5,11 @@ Grid.__index = Grid
 
 function Grid.new()
     local o = setmetatable({size = 4, tiles = {}}, Grid)
-    o.tileFont = love.graphics.newFont("fonts/retro_font.TTF", 50)
-    o.tileFont:setFilter("nearest", "nearest")
-
     for x = 1, o.size, 1 do
         o.tiles[x] = {}
-        for y = 1, o.size, 1 do o.tiles[x][y] = nil end
+        for y = 1, o.size, 1 do 
+            o.tiles[x][y] = Tile.new(128, {x = x, y = y}, 135, 8)
+        end
     end
 
     return o
@@ -36,19 +35,10 @@ function Grid:moveGrid(direction) end
 function Grid:moveTile(position, direction) end
 
 function Grid:draw()
-    love.event.push("custom_evt", 10)
     local offset = 25
-    for x = 0, 3, 1 do
-        for y = 0, 3, 1 do
-
-            love.graphics.setColor(255, 255, 255, 255)
-            love.graphics.rectangle("fill", offset + x * 135 + x * 5,
-                                    offset + y * 135 + y * 5, 135, 135, 8)
-            love.graphics.setColor(0, 0, 0, 255)
-            love.graphics.print("128", self.tileFont,
-                                offset + x * 135 + x * 5 + 5,
-                                offset + y * 135 + y * 5 + 50)
+    for x = 1, 4, 1 do
+        for y = 1, 4, 1 do
+            self.tiles[x][y]:draw({x = x, y = y})
         end
     end
-    love.graphics.setColor(255, 255, 255, 255)
 end
