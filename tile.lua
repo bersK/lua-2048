@@ -15,17 +15,17 @@ tileColors[1024] = "edc53f"
 tileColors[2048] = "edc22e"
 tileColors["super"] = "3c3a32"
 
+local tileFont = love.graphics.newFont("fonts/retro_font.TTF", 35)
+tileFont:setFilter("nearest", "nearest")
+
 function Tile.new(number_in, position_in, size_in, rounding_in)
     local o = setmetatable({
         number = number_in,
         position = position_in,
         size = size_in,
         roundingSize = rounding_in,
-        tileColor = {}
+        tileColor = Tile:getColorTile(number_in)
     }, Tile)
-    o.tileFont = love.graphics.newFont("fonts/retro_font.TTF", 35)
-    o.tileFont:setFilter("nearest", "nearest")
-    o.tileColor = Tile:getColorTile(o.number)
 
     return o
 end
@@ -41,11 +41,11 @@ function Tile:draw(position)
     local x = offset + (position.x-1) * 135 + position.x * 5
     local y = offset + (position.y-1) * 135 + position.y * 5
     love.graphics.setColor(self.tileColor[1]/255, self.tileColor[2]/255, self.tileColor[3]/255, 1)
-    print(self.tileColor[1], self.tileColor[2], self.tileColor[3])
+    -- print(self.tileColor[1], self.tileColor[2], self.tileColor[3])
     love.graphics.rectangle("fill", x, y, self.size,
                             self.size, self.roundingSize)
     love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.printf("4", self.tileFont,
+    love.graphics.printf("4", tileFont,
                         x - 30,
                         y + 55, 200, "center")
 end
