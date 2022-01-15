@@ -4,6 +4,9 @@ local grid = Grid.new()
 
 
 function love.keyreleased(key)
+    if key == "escape" or key == "q" then
+        love.event.push("quit")
+    end
 end
 
 function love.update(dt)
