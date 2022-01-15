@@ -2,6 +2,7 @@ Tile = {}
 Tile.__index = Tile
 
 local tileColors = {}
+tileColors[0] = "eee4da"
 tileColors[2] = "eee4da"
 tileColors[4] = "ede0c8"
 tileColors[8] = "f2b179"
@@ -22,8 +23,8 @@ function Tile.new(number_in, position_in, size_in, rounding_in)
     local o = setmetatable({
         number = number_in,
         position = position_in,
-        size = size_in,
-        roundingSize = rounding_in,
+        size = size_in or 135,
+        roundingSize = rounding_in or 8,
         tileColor = Tile:getColorTile(number_in)
     }, Tile)
 
@@ -38,14 +39,16 @@ end
 
 function Tile:draw(position)
     local offset = 20
-    local x = offset + (position.x-1) * 135 + position.x * 5
-    local y = offset + (position.y-1) * 135 + position.y * 5
+    local x = offset + (position.x-1) * self.size + position.x * 5
+    local y = offset + (position.y-1) * self.size + position.y * 5
     love.graphics.setColor(self.tileColor[1]/255, self.tileColor[2]/255, self.tileColor[3]/255, 1)
     -- print(self.tileColor[1], self.tileColor[2], self.tileColor[3])
     love.graphics.rectangle("fill", x, y, self.size,
                             self.size, self.roundingSize)
     love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.printf("4", tileFont,
-                        x - 30,
-                        y + 55, 200, "center")
+    if self.number ~= 0 then
+        love.graphics.printf(tostring(self.number), tileFont,
+                            x - 30,
+                            y + 55, 200, "center")
+    end
 end
