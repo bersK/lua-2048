@@ -15,31 +15,42 @@ tileColors[1024] = "edc53f"
 tileColors[2048] = "edc22e"
 tileColors["super"] = "3c3a32"
 
-function Tile.new(number)
+function Tile.new(number_in, position_in, size_in, rounding_in)
     local o = setmetatable({
-        number,
-        position = {x = 0, y = 0},
-        size = 135,
-        roundingSize = 8
+        number = number_in,
+        position = position_in,
+        size = size_in,
+        roundingSize = rounding_in
     }, Tile)
+    o.tileFont = love.graphics.newFont("fonts/retro_font.TTF", 35)
+    o.tileFont:setFilter("nearest", "nearest")
+
     return o
 end
 
 function Tile:setColorTile(number)
     local r = "0x" .. tileColors[number]:sub(1, 2)
-    local g = "0x" .. tileColors[number]:sub(3, 2)
-    local b = "0x" .. tileColors[number]:sub(5, 2)
-    love.graphics.setColor(r, g, b, 255)
+    local g = "0x" .. tileColors[number]:sub(3, 4)
+    local b = "0x" .. tileColors[number]:sub(5, 6)
+    -- print(r..g..b)
+    love.graphics.setColor(
+    string.format('%02X',string.byte(r)),
+    string.format('%02X',string.byte(g)),
+    string.format('%02X',string.byte(b)),
+    255)
 end
 
 function Tile:draw(position)
     -- love.graphics.setColor(255,255,255,255)
-    local offset = 25
-    Tile:setColorTile(self.number)
-    love.graphics.rectangle("fill", position.x, position.y, self.size,
+    local offset = 20
+    -- Tile:setColorTile(self.number)
+    local x = offset + (position.x-1) * 135 + position.x * 5
+    local y = offset + (position.y-1) * 135 + position.y * 5
+    Tile:setColorTile(128)
+    love.graphics.rectangle("fill", x, y, self.size,
                             self.size, self.roundingSize)
     love.graphics.setColor(0, 0, 0, 255)
-    love.graphics.print(tostring(self.number), self.tileFont,
-                        offset + position.x * 135 + position.x * 5 + 5,
-                        offset + position.y * 135 + position.y * 5 + 50)
+    love.graphics.printf("4", self.tileFont,
+                        x - 30,
+                        y + 55, 200, "center")
 end
