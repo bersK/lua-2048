@@ -41,3 +41,4 @@ luac.out
 
 .nvimrc
 .vscode/
+*.code-workspace
