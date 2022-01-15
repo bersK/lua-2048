@@ -20,36 +20,31 @@ function Tile.new(number_in, position_in, size_in, rounding_in)
         number = number_in,
         position = position_in,
         size = size_in,
-        roundingSize = rounding_in
+        roundingSize = rounding_in,
+        tileColor = {}
     }, Tile)
     o.tileFont = love.graphics.newFont("fonts/retro_font.TTF", 35)
     o.tileFont:setFilter("nearest", "nearest")
+    o.tileColor = Tile:getColorTile(o.number)
 
     return o
 end
 
-function Tile:setColorTile(number)
-    local r = "0x" .. tileColors[number]:sub(1, 2)
-    local g = "0x" .. tileColors[number]:sub(3, 4)
-    local b = "0x" .. tileColors[number]:sub(5, 6)
-    -- print(r..g..b)
-    love.graphics.setColor(
-    string.format('%02X',string.byte(r)),
-    string.format('%02X',string.byte(g)),
-    string.format('%02X',string.byte(b)),
-    255)
+function Tile:getColorTile(number)
+    local hex = tileColors[number]
+    local r, g, b = tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
+    return {r, g, b}
 end
 
 function Tile:draw(position)
-    -- love.graphics.setColor(255,255,255,255)
     local offset = 20
-    -- Tile:setColorTile(self.number)
     local x = offset + (position.x-1) * 135 + position.x * 5
     local y = offset + (position.y-1) * 135 + position.y * 5
-    Tile:setColorTile(128)
+    love.graphics.setColor(self.tileColor[1]/255, self.tileColor[2]/255, self.tileColor[3]/255, 1)
+    print(self.tileColor[1], self.tileColor[2], self.tileColor[3])
     love.graphics.rectangle("fill", x, y, self.size,
                             self.size, self.roundingSize)
-    love.graphics.setColor(0, 0, 0, 255)
+    love.graphics.setColor(0, 0, 0, 1)
     love.graphics.printf("4", self.tileFont,
                         x - 30,
                         y + 55, 200, "center")
