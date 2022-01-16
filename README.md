@@ -1,12 +1,12 @@
-
 # L2048
 
-Проект по CITB703 Сценарийно програмиране
+Project for CITB703 @ NBU, Sofia
 
-Автор: Стефан Стефанов
+Author: Stefan Stefanov (@bersK)
 
-Играта е клон на 2048, но кодът е авторски. Този проект е писан на Lua чрез Love2D.
+The project "L2048" is a clone of the game 2048, written with Lua and the Love2D framework
 
-Линк към оригиналната [игра](https://github.com/gabrielecirulli/2048)
+### Links
 
-Линк към шрифта [04b_30](https://www.dafont.com/04b-30.font)
+Link to the original [game](https://github.com/gabrielecirulli/2048).
+Link to the font used in the project [04b_30](https://www.dafont.com/04b-30.font)
