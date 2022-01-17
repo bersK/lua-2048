@@ -42,3 +42,7 @@ luac.out
 .nvimrc
 .vscode/
 *.code-workspace
+
+*.pdf
+*.html
+DOCUMENTATION.md

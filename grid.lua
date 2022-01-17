@@ -69,6 +69,7 @@ end
 
 -- Increase the current score of the game (no side effects, abs used on parameter)
 function Grid:addToCurrentScore(number)
+    assert(number < 0, "Passed score cannot be a negative number.")
     self.currentScore = self.currentScore + math.abs(number)
 end
 
