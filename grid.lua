@@ -34,6 +34,7 @@ function Grid:resetGrid()
             self.tiles[x][y] = Tile.new(0, {x = x, y = y})
         end
     end
+    self:generateStartingGrid()
 end
 
 -- Generate a starting board (2 tiles)

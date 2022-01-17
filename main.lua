@@ -11,6 +11,11 @@ function love.keyreleased(key)
         love.event.push("quit")
     end
 
+    if key == "r" or key == "q" then
+        grid:resetGrid()
+        print("Restarting game!")
+    end
+
     if key == "a" then
         print("Move left")
         grid:moveLeft()
