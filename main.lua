@@ -19,18 +19,22 @@ function love.keyreleased(key)
     if key == "a" then
         print("Move left")
         grid:moveLeft()
+        grid:checkGameState()
     end
     if key == "d" then
         print("Move right")
         grid:moveRight()
+        grid:checkGameState()
     end
     if key == "w" then
         print("Move up")
         grid:moveUp()
+        grid:checkGameState()
     end
     if key == "s" then
         print("Move down")
         grid:moveDown()
+        grid:checkGameState()
     end
 end
 

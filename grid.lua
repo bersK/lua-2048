@@ -28,6 +28,8 @@ end
 
 -- Reset all tiles to be the value 0 (blanks)
 function Grid:resetGrid()
+    self:saveScore()
+    self.currentScore = 0
     for x = 1, self.size, 1 do
         self.tiles[x] = {}
         for y = 1, self.size, 1 do
@@ -40,21 +42,24 @@ end
 -- Generate a starting board (2 tiles)
 function Grid:generateStartingGrid()
     math.randomseed(os.time())
-    local x1 = math.random(1, self.size)
-    local y1 = math.random(1, self.size)
-    local x2 = ((x1 + 1) % self.size) + 1
-    local y2 = ((y1 + 1) % self.size) + 1
+    self:generateTile()
+    self:generateTile()
+end
 
-    -- self:insertTile(x1, y1, 2)
-    -- self:insertTile(x2, y2, 2)
-    self:insertTile(1, 1, 4)
-    -- self:insertTile(2, 1, 2)
-    self:insertTile(3, 1, 2)
-    self:insertTile(4, 1, 2)
-    self:insertTile(1, 3, 8)
-    self:insertTile(2, 3, 4)
-    self:insertTile(3, 3, 2)
-    self:insertTile(4, 3, 2)
+function Grid:generateTile()
+    local options = {}
+    for x = 1, self.size, 1 do
+        for y = 1, self.size, 1 do
+            if self.tiles[x][y].number == 0 then
+                table.insert(options, {x=x, y=y})
+            end
+        end
+    end
+
+    local tile = math.random(1, #options)
+    local x = options[tile].x
+    local y = options[tile].y
+    self:insertTile(x, y, 2)
 end
 
 -- Chekc if the tile is free or not (a free tile has a number 0)
@@ -69,7 +74,6 @@ end
 
 -- Increase the current score of the game (no side effects, abs used on parameter)
 function Grid:addToCurrentScore(number)
-    assert(number < 0, "Passed score cannot be a negative number.")
     self.currentScore = self.currentScore + math.abs(number)
 end
 
@@ -96,6 +100,7 @@ function Grid:moveLeft()
             end
         end
     end
+    self:generateTile()
 end
 
 -- Move the tiles right on the grid
@@ -121,6 +126,7 @@ function Grid:moveRight()
             end
         end
     end
+    self:generateTile()
 end
 
 -- Move the tiles up on the grid
@@ -146,6 +152,7 @@ function Grid:moveUp()
             end
         end
     end
+    self:generateTile()
 end
 
 -- Move the tiles down on the grid
@@ -171,6 +178,7 @@ function Grid:moveDown()
             end
         end
     end
+    self:generateTile()
 end
 
 -- Draw all the tiles
@@ -179,6 +187,28 @@ function Grid:draw()
         for y = 1, self.size, 1 do
             self.tiles[x][y]:draw({x = x, y = y})
         end
+    end
+end
+
+function Grid:getAllTileOfType(number)
+    local tiles = {}
+    for x = 1, self.size, 1 do
+        for y = 1, self.size, 1 do
+            if self.tiles[x][y].number == number then
+                table.insert(tiles, number)
+            end
+        end
+    end
+    return #tiles
+end
+
+function Grid:checkGameState()
+    if self:getAllTileOfType(2048) > 0 then
+        print("Game won!")
+        love.graphics.setColor(0/255, 255/255, 0, 255/255)
+        love.graphics.rectangle("fill", 1, 1, 600, 800)
+        love.graphics.setColor(0, 0, 0, 1)
+        love.graphics.print("You've won!", 35, 675)
     end
 end
 
@@ -195,5 +225,6 @@ end
 function Grid:saveScore()
     local data = {}
     data.maxScore = math.max(self.currentScore, self.bestScore)
+    -- data.maxScore = 0
     love.filesystem.write("savegame.txt", serialize(data))
 end

@@ -32,6 +32,9 @@ function Tile.new(number_in, position_in, size_in, rounding_in)
 end
 
 function Tile:getColorTile(number)
+    if tileColors[number] == nil then
+        return self:getColorTile("super")
+    end
     local hex = tileColors[number]
     local r, g, b = tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
     return {r, g, b}
