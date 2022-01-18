@@ -63,6 +63,9 @@ function Grid:generateTile()
         end
     end
 
+    local chance = math.random(1, 10)
+    local number = 2
+    if chance <= 2 then number = 4 end
     local tile = math.random(1, #options)
     local x = options[tile].x
     local y = options[tile].y
