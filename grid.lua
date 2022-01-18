@@ -6,17 +6,24 @@ Grid.__index = Grid
 
 -- Create a grid object and return
 function Grid.new()
-    local o = setmetatable({size = 4, tiles = {}, gameStarted = false, currentScore = 0, bestScore = 0}, Grid)
+    local o = setmetatable({
+        size = 4,
+        tiles = {},
+        gameWon = false,
+        currentScore = 0,
+        bestScore = 0
+    }, Grid)
     -- Populate the grid with tiles
     for x = 1, o.size, 1 do
         o.tiles[x] = {}
-        for y = 1, o.size, 1 do 
+        for y = 1, o.size, 1 do
             o.tiles[x][y] = Tile.new(0, {x = x, y = y})
         end
     end
 
     o:loadScore()
     o:generateStartingGrid()
+    -- o:insertTile(1, 1, 2048)
     return o
 end
 
@@ -51,7 +58,7 @@ function Grid:generateTile()
     for x = 1, self.size, 1 do
         for y = 1, self.size, 1 do
             if self.tiles[x][y].number == 0 then
-                table.insert(options, {x=x, y=y})
+                table.insert(options, {x = x, y = y})
             end
         end
     end
@@ -82,20 +89,20 @@ function Grid:moveLeft()
     for y = 1, 4, 1 do
         for x = 1, 3, 1 do
             local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x+1][y].number
+            local nextTileNumber = self.tiles[x + 1][y].number
             if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber*2)
-                self:addToCurrentScore(currTileNumber*2)
-                self:insertTile(x+1, y, 0)
+                self:insertTile(x, y, currTileNumber * 2)
+                self:addToCurrentScore(currTileNumber * 2)
+                self:insertTile(x + 1, y, 0)
             end
         end
         for i = 1, 4 do
             for x = 1, 3, 1 do
                 local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x+1][y].number
+                local nextTileNumber = self.tiles[x + 1][y].number
                 if currTileNumber == 0 and nextTileNumber ~= 0 then
                     self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x+1, y, 0)
+                    self:insertTile(x + 1, y, 0)
                 end
             end
         end
@@ -108,20 +115,20 @@ function Grid:moveRight()
     for y = 1, 4, 1 do
         for x = 4, 2, -1 do
             local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x-1][y].number
+            local nextTileNumber = self.tiles[x - 1][y].number
             if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber*2)
-                self:addToCurrentScore(currTileNumber*2)
-                self:insertTile(x-1, y, 0)
+                self:insertTile(x, y, currTileNumber * 2)
+                self:addToCurrentScore(currTileNumber * 2)
+                self:insertTile(x - 1, y, 0)
             end
         end
         for i = 1, 4 do
             for x = 4, 2, -1 do
                 local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x-1][y].number
+                local nextTileNumber = self.tiles[x - 1][y].number
                 if currTileNumber == 0 and nextTileNumber ~= 0 then
                     self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x-1, y, 0)
+                    self:insertTile(x - 1, y, 0)
                 end
             end
         end
@@ -135,20 +142,20 @@ function Grid:moveUp()
         for i = 1, 4 do
             for y = 1, 3, 1 do
                 local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x][y+1].number
+                local nextTileNumber = self.tiles[x][y + 1].number
                 if currTileNumber == 0 and nextTileNumber ~= 0 then
                     self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x, y+1, 0)
+                    self:insertTile(x, y + 1, 0)
                 end
             end
         end
         for y = 1, 3, 1 do
             local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x][y+1].number
+            local nextTileNumber = self.tiles[x][y + 1].number
             if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber*2)
-                self:addToCurrentScore(currTileNumber*2)
-                self:insertTile(x, y+1, 0)
+                self:insertTile(x, y, currTileNumber * 2)
+                self:addToCurrentScore(currTileNumber * 2)
+                self:insertTile(x, y + 1, 0)
             end
         end
     end
@@ -161,20 +168,20 @@ function Grid:moveDown()
         for i = 1, 4 do
             for y = 4, 2, -1 do
                 local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x][y-1].number
+                local nextTileNumber = self.tiles[x][y - 1].number
                 if currTileNumber == 0 and nextTileNumber ~= 0 then
                     self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x, y-1, 0)
+                    self:insertTile(x, y - 1, 0)
                 end
             end
         end
         for y = 4, 2, -1 do
             local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x][y-1].number
+            local nextTileNumber = self.tiles[x][y - 1].number
             if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber*2)
-                self:addToCurrentScore(currTileNumber*2)
-                self:insertTile(x, y-1, 0)
+                self:insertTile(x, y, currTileNumber * 2)
+                self:addToCurrentScore(currTileNumber * 2)
+                self:insertTile(x, y - 1, 0)
             end
         end
     end
@@ -184,10 +191,17 @@ end
 -- Draw all the tiles
 function Grid:draw()
     for x = 1, self.size, 1 do
-        for y = 1, self.size, 1 do
-            self.tiles[x][y]:draw({x = x, y = y})
-        end
+        for y = 1, self.size, 1 do self.tiles[x][y]:draw({x = x, y = y}) end
     end
+    if self.gameWon then self:drawWinScreen() end
+end
+
+function Grid:drawWinScreen()
+    local winFont = love.graphics.newFont("fonts/retro_font.TTF", 30)
+    love.graphics.setColor(150 / 255, 200 / 255, 0, 80 / 255)
+    love.graphics.rectangle("fill", 1, 1, 600, 800)
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.print("You win!", winFont, 215, 475)
 end
 
 function Grid:getAllTileOfType(number)
@@ -205,10 +219,7 @@ end
 function Grid:checkGameState()
     if self:getAllTileOfType(2048) > 0 then
         print("Game won!")
-        love.graphics.setColor(0/255, 255/255, 0, 255/255)
-        love.graphics.rectangle("fill", 1, 1, 600, 800)
-        love.graphics.setColor(0, 0, 0, 1)
-        love.graphics.print("You've won!", 35, 675)
+        self.gameWon = true
     end
 end
 
