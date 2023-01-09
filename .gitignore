@@ -43,6 +43,5 @@ luac.out
 .vscode/
 *.code-workspace
 
-*.pdf
-*.html
-DOCUMENTATION.md
+#Generated files
+docs/

@@ -1,5 +1,6 @@
 require("grid")
 
+local grid_state = {}
 local grid = Grid.new()
 
 local bestScoreFont = love.graphics.newFont("fonts/retro_font.TTF", 30)

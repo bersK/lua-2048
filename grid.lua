@@ -1,4 +1,5 @@
 require("tile")
+require("movement")
 local serialize = require("lib/ser")
 
 Grid = {}
@@ -9,6 +10,7 @@ function Grid.new()
     local o = setmetatable({
         size = 4,
         tiles = {},
+        grid = {},
         gameWon = false,
         currentScore = 0,
         bestScore = 0
@@ -17,20 +19,20 @@ function Grid.new()
     for x = 1, o.size, 1 do
         o.tiles[x] = {}
         for y = 1, o.size, 1 do
+            o.grid[x][y] = 0
             o.tiles[x][y] = Tile.new(0, {x = x, y = y})
         end
     end
 
     o:loadScore()
     o:generateStartingGrid()
-    -- o:insertTile(1, 1, 2048)
     return o
 end
 
 -- Check if coordinates are within the grid and returns a bool
 function Grid:withinBounds(position)
-    return position.x >= 1 and position.x <= self.size and position.y >= 1 and
-               position.y <= self.size
+    return position.x >= 1 and position.x <= self.size and
+           position.y >= 1 and position.y <= self.size
 end
 
 -- Reset all tiles to be the value 0 (blanks)
@@ -69,7 +71,7 @@ function Grid:generateTile()
     local tile = math.random(1, #options)
     local x = options[tile].x
     local y = options[tile].y
-    self:insertTile(x, y, 2)
+    self:insertTile(x, y, number)
 end
 
 -- Chekc if the tile is free or not (a free tile has a number 0)
@@ -85,110 +87,6 @@ end
 -- Increase the current score of the game (no side effects, abs used on parameter)
 function Grid:addToCurrentScore(number)
     self.currentScore = self.currentScore + math.abs(number)
-end
-
--- Move the tiles left on the grid
-function Grid:moveLeft()
-    for y = 1, 4, 1 do
-        for x = 1, 3, 1 do
-            local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x + 1][y].number
-            if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber * 2)
-                self:addToCurrentScore(currTileNumber * 2)
-                self:insertTile(x + 1, y, 0)
-            end
-        end
-        for i = 1, 4 do
-            for x = 1, 3, 1 do
-                local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x + 1][y].number
-                if currTileNumber == 0 and nextTileNumber ~= 0 then
-                    self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x + 1, y, 0)
-                end
-            end
-        end
-    end
-    self:generateTile()
-end
-
--- Move the tiles right on the grid
-function Grid:moveRight()
-    for y = 1, 4, 1 do
-        for x = 4, 2, -1 do
-            local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x - 1][y].number
-            if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber * 2)
-                self:addToCurrentScore(currTileNumber * 2)
-                self:insertTile(x - 1, y, 0)
-            end
-        end
-        for i = 1, 4 do
-            for x = 4, 2, -1 do
-                local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x - 1][y].number
-                if currTileNumber == 0 and nextTileNumber ~= 0 then
-                    self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x - 1, y, 0)
-                end
-            end
-        end
-    end
-    self:generateTile()
-end
-
--- Move the tiles up on the grid
-function Grid:moveUp()
-    for x = 1, 4, 1 do
-        for i = 1, 4 do
-            for y = 1, 3, 1 do
-                local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x][y + 1].number
-                if currTileNumber == 0 and nextTileNumber ~= 0 then
-                    self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x, y + 1, 0)
-                end
-            end
-        end
-        for y = 1, 3, 1 do
-            local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x][y + 1].number
-            if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber * 2)
-                self:addToCurrentScore(currTileNumber * 2)
-                self:insertTile(x, y + 1, 0)
-            end
-        end
-    end
-    self:generateTile()
-end
-
--- Move the tiles down on the grid
-function Grid:moveDown()
-    for x = 1, 4, 1 do
-        for i = 1, 4 do
-            for y = 4, 2, -1 do
-                local currTileNumber = self.tiles[x][y].number
-                local nextTileNumber = self.tiles[x][y - 1].number
-                if currTileNumber == 0 and nextTileNumber ~= 0 then
-                    self:insertTile(x, y, nextTileNumber)
-                    self:insertTile(x, y - 1, 0)
-                end
-            end
-        end
-        for y = 4, 2, -1 do
-            local currTileNumber = self.tiles[x][y].number
-            local nextTileNumber = self.tiles[x][y - 1].number
-            if currTileNumber == nextTileNumber and currTileNumber ~= 0 then
-                self:insertTile(x, y, currTileNumber * 2)
-                self:addToCurrentScore(currTileNumber * 2)
-                self:insertTile(x, y - 1, 0)
-            end
-        end
-    end
-    self:generateTile()
 end
 
 -- Draw all the tiles
